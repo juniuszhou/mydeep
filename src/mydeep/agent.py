@@ -6,7 +6,7 @@ from typing import Any
 
 from deepagents import create_deep_agent
 
-DEFAULT_MODEL = "gemma4:e4b"
+DEFAULT_MODEL = "gemma4:e2b"
 
 DISPATCHER_PROMPT = """You are my-agent, an orchestration-focused deepagent.
 

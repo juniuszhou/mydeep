@@ -1,8 +1,9 @@
 """Basic LangChain setup."""
 
 import os
+from pprint import pprint
 
-from deepagents import create_deep_agent
+from deepagents import AsyncSubAgent, create_deep_agent
 from langchain_openai import ChatOpenAI
 
 # Set up local LLM (Ollama endpoint)
@@ -16,14 +17,24 @@ llm = ChatOpenAI(
     api_key="ollama",
 )
 
-agent = create_deep_agent(
+subagent = AsyncSubAgent(
     model="ollama:gemma4:e2b",
     tools=[],
     system_prompt="You are a helpful assistant that can answer questions and help with tasks.",
+    name="basic-subagent",
+    description="A helpful assistant that can answer questions and help with tasks.",
+)
+
+agent = create_deep_agent(
+    model="ollama:gemma4:e2b",
+    tools=[],
+    subagents=[subagent],
+    system_prompt="You are an agent manager to coordinate and assign take to your subagents.",
     name="basic-agent",
 )
 
 result = agent.invoke(
     {"messages": [{"role": "user", "content": "What is the capital of France?"}]}
 )
-print(result)
+for message in result["messages"]:
+    pprint(message.content)

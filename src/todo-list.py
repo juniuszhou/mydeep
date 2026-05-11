@@ -3,6 +3,7 @@
 import os
 
 from deepagents import create_deep_agent
+from langchain.agents.middleware import TodoListMiddleware
 from langchain_openai import ChatOpenAI
 
 # Set up local LLM (Ollama endpoint)
@@ -19,6 +20,13 @@ llm = ChatOpenAI(
 agent = create_deep_agent(
     model="ollama:gemma4:e2b",
     tools=[],
+    middleware=[
+        TodoListMiddleware(
+            model="gemma4:e2b",
+            max_tools=3,
+            always_include=["search"],
+        )
+    ],
     system_prompt="You are a helpful assistant that can answer questions and help with tasks.",
     name="basic-agent",
 )
